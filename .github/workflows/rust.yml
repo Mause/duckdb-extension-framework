@@ -30,10 +30,11 @@ jobs:
     - run: GEN=ninja make debug
       working-directory: duckdb
 
-    - run: ls ${{ github.workspace }}/build/debug/src/
-
+    - run: |
+        pwd
+        ls ${{ github.workspace }}/duckdb/build/debug/src/
 
     - name: Run tests
       run: cargo test --verbose --all-features
       env:
-        LD_LIBRARY_PATH: ${{ github.workspace }}/build/debug/src/
+        LD_LIBRARY_PATH: ${{ github.workspace }}/duckdb/build/debug/src/
