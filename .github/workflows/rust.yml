@@ -33,8 +33,10 @@ jobs:
     - run: |
         pwd
         ls ${{ github.workspace }}/duckdb/build/debug/src/
+        ls /usr/lib/gcc/x86_64-linux-gnu/11
 
     - name: Run tests
       run: cargo test --verbose --all-features
       env:
         LD_LIBRARY_PATH: ${{ github.workspace }}/duckdb/build/debug/src/
+        LD_PRELOAD: /usr/lib/gcc/x86_64-linux-gnu/11/libasan.so
