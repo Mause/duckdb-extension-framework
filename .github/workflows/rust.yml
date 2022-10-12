@@ -33,4 +33,4 @@ jobs:
     - name: Run tests
       run: cargo test --verbose --all-features
       env:
-        LD_LIBRARY_PATH: ./duckdb-deltatable-extension/build/debug/src/
+        LD_LIBRARY_PATH: ${{ github.workspace }}/build/debug/src/
