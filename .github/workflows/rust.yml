@@ -25,5 +25,10 @@ jobs:
 
     - name: Build
       run: cargo build --verbose
+
+    - run: sudo apt install ninja-build build-essential
+    - run: GEN=ninja make debug
+      working-directory: duckdb
+
     - name: Run tests
       run: cargo test --verbose --all-features
