@@ -33,10 +33,9 @@ jobs:
     - run: |
         pwd
         ls ${{ github.workspace }}/duckdb/build/debug/src/
-        ls /usr/lib/gcc/x86_64-linux-gnu/11
+        echo "LD_PRELOAD=$(whereis libasan.so.6 | cut -d " " -f 2)" >> $GITHUB_ENV
 
     - name: Run tests
       run: cargo test --verbose --all-features
       env:
         LD_LIBRARY_PATH: ${{ github.workspace }}/duckdb/build/debug/src/
-        LD_PRELOAD: /usr/lib/gcc/x86_64-linux-gnu/11/libasan.so
