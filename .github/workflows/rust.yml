@@ -33,7 +33,7 @@ jobs:
     - run: |
         pwd
         ls ${{ github.workspace }}/duckdb/build/debug/src/
-        echo "LD_PRELOAD=$(whereis libasan.so.6 | cut -d " " -f 2)" >> $GITHUB_ENV
+        echo "LD_PRELOAD=$(whereis libasan.so.6 | cut -d ' ' -f 2)" >> $GITHUB_ENV
 
     - name: Run tests
       run: cargo test --verbose --all-features
