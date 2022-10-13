@@ -32,7 +32,7 @@ jobs:
       working-directory: duckdb
 
     - name: Compile tests
-      run: cargo test --no-run
+      run: cargo test --no-run --all-features
 
     - run: |
         pwd
