@@ -3,10 +3,9 @@ name = "duckdb-extension-framework"
 version = "0.1.0"
 edition = "2021"
 description = "Purely experimental DuckDB extension framework"
-license = "MIT"
-#license-file
-#documentation
-#homepage
+license-file = "LICENSE"
+documentation = "https://docs.rs/duckdb-extension-framework"
+homepage = "https://github.com/Mause/duckdb-extension-framework"
 repository = "https://github.com/Mause/duckdb-extension-framework"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
