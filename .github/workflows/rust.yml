@@ -40,8 +40,10 @@ jobs:
     - name: cleanup
       run: |
         ls
-        rm -rf duckdb
-        git checkout duckdb/src/include/duckdb.h
+        rm -rf duckdb/*
+
+    - working-directory: duckdb
+      run: git checkout src/include/duckdb.h
 
     - uses: katyo/publish-crates@v1
       if: github.ref == 'refs/heads/main'
