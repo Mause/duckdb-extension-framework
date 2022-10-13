@@ -37,6 +37,8 @@ jobs:
     - name: Run tests
       run: LD_PRELOAD=$(whereis libasan.so.6 | cut -d ' ' -f 2) cargo test --verbose --all-features
 
+    - run: rm -rf duckdb/build
+
     - uses: katyo/publish-crates@v1
       if: github.ref == 'refs/heads/main'
       with:
