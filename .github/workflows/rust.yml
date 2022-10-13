@@ -12,8 +12,9 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+      LD_LIBRARY_PATH: ${{ github.workspace }}/duckdb/build/debug/src/
 
     steps:
     - uses: actions/checkout@v3
@@ -40,5 +41,3 @@ jobs:
 
     - name: Run tests
       run: cargo test --verbose --all-features
-      env:
-        LD_LIBRARY_PATH: ${{ github.workspace }}/duckdb/build/debug/src/
