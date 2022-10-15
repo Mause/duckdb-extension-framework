@@ -49,3 +49,4 @@ jobs:
       if: github.ref == 'refs/heads/main'
       with:
           registry-token: ${{ secrets.CARGO_TOKEN }}
+          ignore-unpublished-changes: true
