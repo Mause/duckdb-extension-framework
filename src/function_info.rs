@@ -8,9 +8,9 @@ use std::os::raw::c_char;
 pub struct FunctionInfo(duckdb_function_info);
 
 impl FunctionInfo {
-    pub fn set_error(&self, p0: &str) {
+    pub fn set_error(&self, error: &str) {
         unsafe {
-            duckdb_function_set_error(self.0, as_string!(p0));
+            duckdb_function_set_error(self.0, as_string!(error));
         }
     }
     pub fn get_bind_data<T>(&self) -> *mut T {

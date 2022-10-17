@@ -25,8 +25,8 @@ impl DataChunk {
 
         Self { ptr, owned: true }
     }
-    pub fn get_vector(&self, p0: u64) -> Vector {
-        Vector::from(unsafe { duckdb_data_chunk_get_vector(self.ptr, p0) })
+    pub fn get_vector(&self, column_index: u64) -> Vector {
+        Vector::from(unsafe { duckdb_data_chunk_get_vector(self.ptr, column_index) })
     }
     pub fn set_size(&self, size: u64) {
         unsafe { duckdb_data_chunk_set_size(self.ptr, size) };
