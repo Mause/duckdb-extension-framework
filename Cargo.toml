@@ -1,6 +1,6 @@
 [package]
 name = "duckdb-extension-framework"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 description = "Purely experimental DuckDB extension framework"
 license-file = "LICENSE"
