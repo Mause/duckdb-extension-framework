@@ -1,5 +1,5 @@
 use crate::duckly::{
-    duckdb_create_table_function, duckdb_destroy_table_function,
+    duckdb_create_table_function, duckdb_destroy_table_function, duckdb_table_function,
     duckdb_table_function_add_parameter, duckdb_table_function_set_bind,
     duckdb_table_function_set_function, duckdb_table_function_set_init,
     duckdb_table_function_set_name, duckdb_table_function_supports_projection_pushdown,
@@ -8,7 +8,7 @@ use crate::logical_type::LogicalType;
 use std::ffi::{c_void, CString};
 
 pub struct TableFunction {
-    pub(crate) ptr: *mut c_void,
+    pub(crate) ptr: duckdb_table_function,
 }
 
 impl Drop for TableFunction {
