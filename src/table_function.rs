@@ -7,6 +7,7 @@ use crate::duckly::{
 use crate::logical_type::LogicalType;
 use std::ffi::{c_void, CString};
 
+#[derive(Debug)]
 pub struct TableFunction {
     pub(crate) ptr: duckdb_table_function,
 }

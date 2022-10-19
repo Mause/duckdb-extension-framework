@@ -5,6 +5,7 @@ use crate::duckly::{
 };
 use std::os::raw::c_char;
 
+#[derive(Debug)]
 pub struct FunctionInfo(duckdb_function_info);
 
 impl FunctionInfo {

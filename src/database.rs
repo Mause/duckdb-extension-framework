@@ -6,10 +6,12 @@ use std::ptr::{addr_of, null_mut};
 
 /// Equivalent of [`DatabaseData`](https://github.com/duckdb/duckdb/blob/50951241de3d9c06fac5719dcb907eb21163dcab/src/include/duckdb/main/capi_internal.hpp#L27), wraps `duckdb::DuckDB`
 #[repr(C)]
+#[derive(Debug)]
 struct Wrapper {
     instance: *const c_void,
 }
 
+#[derive(Debug)]
 pub struct Database(Wrapper);
 
 impl Database {

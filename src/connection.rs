@@ -1,6 +1,7 @@
 use crate::duckly::{duckdb_connection, duckdb_disconnect, duckdb_register_table_function};
 use crate::{check, TableFunction};
 
+#[derive(Debug)]
 pub struct Connection {
     ptr: duckdb_connection,
 }

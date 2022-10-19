@@ -5,6 +5,7 @@ use crate::duckly::{
     duckdb_init_set_init_data, idx_t,
 };
 
+#[derive(Debug)]
 pub struct InitInfo(duckdb_init_info);
 
 impl From<duckdb_init_info> for InitInfo {

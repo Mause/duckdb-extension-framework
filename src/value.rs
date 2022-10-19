@@ -1,6 +1,7 @@
 use crate::duckly::{duckdb_destroy_value, duckdb_get_varchar, duckdb_value};
 use std::ffi::CString;
 
+#[derive(Debug)]
 pub struct Value(duckdb_value);
 
 impl Value {

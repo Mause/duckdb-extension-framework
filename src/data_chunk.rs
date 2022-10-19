@@ -5,6 +5,7 @@ use crate::duckly::{
 };
 use crate::{LogicalType, Vector};
 
+#[derive(Debug)]
 pub struct DataChunk {
     ptr: duckdb_data_chunk,
     owned: bool,

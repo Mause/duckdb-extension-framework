@@ -6,6 +6,7 @@ use crate::{as_string, LogicalType, Value};
 use std::ffi::c_void;
 use std::os::raw::c_char;
 
+#[derive(Debug)]
 pub struct BindInfo {
     ptr: *mut c_void,
 }
