@@ -26,6 +26,13 @@ impl DataChunk {
 
         Self { ptr, owned: true }
     }
+    
+    /// Retrieves the vector at the specified column index in the data chunk.
+    ///
+    /// The pointer to the vector is valid for as long as the chunk is alive.
+    /// It does NOT need to be destroyed.
+    ///
+    ///  returns: The vector
     pub fn get_vector(&self, column_index: u64) -> Vector {
         Vector::from(unsafe { duckdb_data_chunk_get_vector(self.ptr, column_index) })
     }
