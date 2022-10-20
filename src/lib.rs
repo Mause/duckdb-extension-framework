@@ -1,3 +1,5 @@
+//! This crate facilitates developement of DuckDB extensions using Rust
+
 mod bind_info;
 mod connection;
 pub mod constants;

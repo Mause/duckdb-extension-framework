@@ -72,6 +72,10 @@ impl TableFunction {
         }
     }
 
+    /// Sets the name of the given table function.
+    ///
+    /// # Arguments
+    ///  * `name`: The name of the table function
     pub fn set_name(&self, name: &str) -> &TableFunction {
         unsafe {
             let string = CString::from_vec_unchecked(name.as_bytes().into());
