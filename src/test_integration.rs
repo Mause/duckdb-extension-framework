@@ -8,7 +8,7 @@ use crate::duckly::{
     duckdb_state_DuckDBError, duckdb_value_varchar,
 };
 use crate::{
-    malloc_struct, BindInfo, DataChunk, FunctionInfo, InitInfo, LogicalType, TableFunctionBuilder,
+    malloc_struct, BindInfo, DataChunk, FunctionInfo, InitInfo, LogicalType, TableFunction,
 };
 use std::error::Error;
 use std::ffi::{CStr, CString};
@@ -65,17 +65,15 @@ fn test_database_creation() -> Result<(), Box<dyn Error>> {
     let db = Database::new()?;
     let conn = db.connect()?;
 
-    conn.register_table_function(
-        TableFunctionBuilder::default()
-            .parameters(vec![LogicalType::new(DuckDBType::Json)])
-            .name("read_json".to_string())
-            .supports_pushdown(false)
-            .func(func)
-            .init(init)
-            .bind(bind)
-            .build()?
-            .build(),
-    )?;
+    let table_function = TableFunction::default();
+    table_function
+        .add_parameter(&LogicalType::new(DuckDBType::Json))
+        .set_name("read_json")
+        .supports_pushdown(false)
+        .set_function(Some(func))
+        .set_init(Some(init))
+        .set_bind(Some(bind));
+    conn.register_table_function(table_function)?;
 
     let query = CString::new("select * from read_json('hello.json')")?;
 
