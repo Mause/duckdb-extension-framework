@@ -14,6 +14,8 @@ mod test_integration;
 mod value;
 mod vector;
 
+use std::mem::size_of;
+
 pub use crate::bind_info::BindInfo;
 pub use crate::connection::Connection;
 pub use crate::data_chunk::DataChunk;
@@ -24,3 +26,11 @@ pub use crate::logical_type::LogicalType;
 pub use crate::table_function::TableFunction;
 pub use crate::value::Value;
 pub use crate::vector::Vector;
+
+use crate::duckly::duckdb_malloc;
+
+/// # Safety
+/// This function is obviously unsafe
+pub unsafe fn malloc_struct<T>() -> *mut T {
+    duckdb_malloc(size_of::<T>() as u64).cast::<T>()
+}
