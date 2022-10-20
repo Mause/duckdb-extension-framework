@@ -11,6 +11,7 @@ use crate::{
 use std::ffi::{c_char, c_void};
 use std::fmt::Debug;
 
+/// Vector of values of a specified PhysicalType.
 pub struct Vector(duckdb_vector);
 
 impl From<duckdb_vector> for Vector {
@@ -20,6 +21,9 @@ impl From<duckdb_vector> for Vector {
 }
 
 impl Vector {
+    /// Retrieves the data pointer of the vector.
+    ///
+    /// The data pointer can be used to read or write values from the vector. How to read or write values depends on the type of the vector.
     pub fn get_data(&self) -> *mut c_void {
         unsafe { duckdb_vector_get_data(self.0) }
     }
@@ -51,6 +55,7 @@ impl Vector {
     pub unsafe fn assign_string_element(&self, index: idx_t, str_: *const c_char) {
         duckdb_vector_assign_string_element(self.0, index, str_);
     }
+    /// Retrieves the column type of the specified vector.
     pub fn get_column_type(&self) -> LogicalType {
         unsafe { LogicalType::from(duckdb_vector_get_column_type(self.0)) }
     }

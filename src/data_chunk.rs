@@ -5,6 +5,23 @@ use crate::duckly::{
 };
 use crate::{LogicalType, Vector};
 
+/// A Data Chunk represents a set of vectors.
+///
+/// The data chunk class is the intermediate representation used by the
+/// execution engine of DuckDB. It effectively represents a subset of a relation.
+/// It holds a set of vectors that all have the same length.
+///
+/// DataChunk is initialized using the DataChunk::Initialize function by
+/// providing it with a vector of TypeIds for the Vector members. By default,
+/// this function will also allocate a chunk of memory in the DataChunk for the
+/// vectors and all the vectors will be referencing vectors to the data owned by
+/// the chunk. The reason for this behavior is that the underlying vectors can
+/// become referencing vectors to other chunks as well (i.e. in the case an
+/// operator does not alter the data, such as a Filter operator which only adds a
+/// selection vector).
+///
+/// In addition to holding the data of the vectors, the DataChunk also owns the
+/// selection vector that underlying vectors can point to.
 #[derive(Debug)]
 pub struct DataChunk {
     ptr: duckdb_data_chunk,

@@ -12,17 +12,33 @@ pub struct BindInfo {
 }
 
 impl BindInfo {
+    /// Adds a result column to the output of the table function.
+    ///
+    /// # Arguments
+    ///  * `name`: The name of the column
+    ///  * `type`: The logical type of the column
     pub fn add_result_column(&self, column_name: &str, column_type: LogicalType) {
         unsafe {
             duckdb_bind_add_result_column(self.ptr, as_string!(column_name), column_type.typ);
         }
     }
+    /// Report that an error has occurred while calling bind.
+    ///
+    /// # Arguments
+    ///  * `error`: The error message
     pub fn set_error(&self, error: &str) {
         unsafe {
             duckdb_bind_set_error(self.ptr, as_string!(error));
         }
     }
+    /// Sets the user-provided bind data in the bind object. This object can be retrieved again during execution.
+    ///
+    /// # Arguments
+    ///  * `extra_data`: The bind data object.
+    ///  * `destroy`: The callback that will be called to destroy the bind data (if any)
+    ///
     /// # Safety
+    ///
     pub unsafe fn set_bind_data(
         &self,
         data: *mut c_void,
@@ -30,9 +46,16 @@ impl BindInfo {
     ) {
         duckdb_bind_set_bind_data(self.ptr, data, free_function);
     }
+    /// Retrieves the number of regular (non-named) parameters to the function.
     pub fn get_parameter_count(&self) -> u64 {
         unsafe { duckdb_bind_get_parameter_count(self.ptr) }
     }
+    /// Retrieves the parameter at the given index.
+    ///
+    /// # Arguments
+    ///  * `index`: The index of the parameter to get
+    ///
+    /// returns: The value of the parameter
     pub fn get_parameter(&self, param_index: u64) -> Value {
         unsafe { Value::from(duckdb_bind_get_parameter(self.ptr, param_index)) }
     }

@@ -9,6 +9,10 @@ use std::os::raw::c_char;
 pub struct FunctionInfo(duckdb_function_info);
 
 impl FunctionInfo {
+    /// Report that an error has occurred while executing the function.
+    ///
+    /// # Arguments
+    ///  * `error`: The error message
     pub fn set_error(&self, error: &str) {
         unsafe {
             duckdb_function_set_error(self.0, as_string!(error));
