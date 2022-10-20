@@ -34,7 +34,9 @@ jobs:
     - name: Compile tests
       run: cargo test --no-run --all-features
       
-    - run: file target/debug/deps/*
+    - run: |
+        file target/debug/deps/*
+        valgrind $(ls target/debug/deps/duckdb_extension_framework-* | head -n 1)
 
     - name: Run tests
       run: LD_PRELOAD=$(whereis libasan.so.6 | cut -d ' ' -f 2) cargo test --verbose --all-features
