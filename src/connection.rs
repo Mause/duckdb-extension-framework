@@ -22,6 +22,11 @@ impl Connection {
         }
         Ok(())
     }
+
+    /// Returns the internal connection pointer
+    pub fn get_ptr(&self) -> duckdb_connection {
+        self.ptr
+    }
 }
 
 impl Drop for Connection {
