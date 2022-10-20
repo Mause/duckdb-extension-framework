@@ -26,7 +26,7 @@ impl DataChunk {
 
         Self { ptr, owned: true }
     }
-    
+
     /// Retrieves the vector at the specified column index in the data chunk.
     ///
     /// The pointer to the vector is valid for as long as the chunk is alive.
