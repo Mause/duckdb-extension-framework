@@ -33,6 +33,10 @@ jobs:
 
     - name: Compile tests
       run: cargo test --no-run --all-features
+
+    - run: |
+        sudo apt update
+        sudo apt install -y valgrind
       
     - run: |
         file target/debug/deps/*
