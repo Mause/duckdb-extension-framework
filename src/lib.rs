@@ -9,6 +9,8 @@ mod function_info;
 mod init_info;
 mod logical_type;
 mod table_function;
+#[cfg(test)]
+mod test_integration;
 mod value;
 mod vector;
 
