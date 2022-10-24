@@ -49,19 +49,22 @@ impl DataChunk {
     /// The pointer to the vector is valid for as long as the chunk is alive.
     /// It does NOT need to be destroyed.
     ///
-    ///  returns: The vector
-    pub fn get_vector(&self, column_index: u64) -> Vector {
+    pub fn get_vector(&self, column_index: idx_t) -> Vector {
         Vector::from(unsafe { duckdb_data_chunk_get_vector(self.ptr, column_index) })
     }
-    pub fn set_size(&self, size: u64) {
+    /// Sets the current number of tuples in a data chunk.
+    pub fn set_size(&self, size: idx_t) {
         unsafe { duckdb_data_chunk_set_size(self.ptr, size) };
     }
-    pub fn chunk_reset(&self) {
+    /// Resets a data chunk, clearing the validity masks and setting the cardinality of the data chunk to 0.
+    pub fn reset(&self) {
         unsafe { duckdb_data_chunk_reset(self.ptr) }
     }
+    /// Retrieves the number of columns in a data chunk.
     pub fn get_column_count(&self) -> idx_t {
         unsafe { duckdb_data_chunk_get_column_count(self.ptr) }
     }
+    /// Retrieves the current number of tuples in a data chunk.
     pub fn get_size(&self) -> idx_t {
         unsafe { duckdb_data_chunk_get_size(self.ptr) }
     }
