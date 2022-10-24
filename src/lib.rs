@@ -34,5 +34,5 @@ use crate::duckly::duckdb_malloc;
 /// # Safety
 /// This function is obviously unsafe
 pub unsafe fn malloc_struct<T>() -> *mut T {
-    duckdb_malloc(size_of::<T>() as u64).cast::<T>()
+    duckdb_malloc(size_of::<T>()).cast::<T>()
 }
