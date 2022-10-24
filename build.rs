@@ -14,7 +14,6 @@ fn main() {
     {
         use build_script::{cargo_rustc_link_lib, cargo_rustc_link_search};
         cargo_rustc_link_lib("duckdb");
-        cargo_rustc_link_lib("asan");
         cargo_rustc_link_search(duckdb_root.join("build/debug/src"));
         cargo_rustc_link_search(duckdb_root.join("build/release/src"));
     }

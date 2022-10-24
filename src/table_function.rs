@@ -7,6 +7,7 @@ use crate::duckly::{
 use crate::logical_type::LogicalType;
 use std::ffi::{c_void, CString};
 
+/// A function that returns a queryable table
 #[derive(Debug)]
 pub struct TableFunction {
     pub(crate) ptr: duckdb_table_function,
@@ -27,7 +28,8 @@ impl TableFunction {
     /// the `InitInfo::get_column_indices` method.
     /// If this is set to false (the default), the system will expect all columns to be projected.
     ///
-    /// pushdown: True if the table function supports projection pushdown, false otherwise.
+    /// # Arguments
+    ///  * `pushdown`: True if the table function supports projection pushdown, false otherwise.
     pub fn supports_pushdown(&self, supports: bool) -> &Self {
         unsafe {
             duckdb_table_function_supports_projection_pushdown(self.ptr, supports);
@@ -35,6 +37,10 @@ impl TableFunction {
         self
     }
 
+    /// Adds a parameter to the table function.
+    ///
+    /// # Arguments
+    ///  * `logical_type`: The type of the parameter to add.
     pub fn add_parameter(&self, logical_type: &LogicalType) -> &Self {
         unsafe {
             duckdb_table_function_add_parameter(self.ptr, logical_type.typ);
@@ -42,6 +48,10 @@ impl TableFunction {
         self
     }
 
+    /// Sets the main function of the table function
+    ///
+    /// # Arguments
+    ///  * `function`: The function
     pub fn set_function(
         &self,
         func: Option<unsafe extern "C" fn(*mut c_void, *mut c_void)>,
@@ -52,6 +62,10 @@ impl TableFunction {
         self
     }
 
+    /// Sets the init function of the table function
+    ///
+    /// # Arguments
+    ///  * `function`: The init function
     pub fn set_init(&self, init_func: Option<unsafe extern "C" fn(*mut c_void)>) -> &Self {
         unsafe {
             duckdb_table_function_set_init(self.ptr, init_func);
@@ -59,6 +73,10 @@ impl TableFunction {
         self
     }
 
+    /// Sets the bind function of the table function
+    ///
+    /// # Arguments
+    ///  * `function`: The bind function
     pub fn set_bind(&self, bind_func: Option<unsafe extern "C" fn(*mut c_void)>) -> &Self {
         unsafe {
             duckdb_table_function_set_bind(self.ptr, bind_func);
@@ -66,6 +84,7 @@ impl TableFunction {
         self
     }
 
+    /// Creates a new empty table function.
     pub fn new() -> Self {
         Self {
             ptr: unsafe { duckdb_create_table_function() },
