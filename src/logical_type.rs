@@ -1,7 +1,7 @@
 use crate::constants::DuckDBType;
 use crate::duckly::{
-    duckdb_create_logical_type, duckdb_destroy_logical_type, duckdb_get_type_id,
-    duckdb_logical_type,
+    duckdb_create_logical_type, duckdb_create_map_type, duckdb_destroy_logical_type,
+    duckdb_get_type_id, duckdb_logical_type,
 };
 use num_traits::FromPrimitive;
 
@@ -18,10 +18,24 @@ impl LogicalType {
             }
         }
     }
+    pub fn new_map_type(key: &LogicalType, value: &LogicalType) -> Self {
+        unsafe {
+            Self {
+                typ: duckdb_create_map_type(key.typ, value.typ),
+            }
+        }
+    }
     pub fn type_id(&self) -> DuckDBType {
         let id = unsafe { duckdb_get_type_id(self.typ) };
 
         FromPrimitive::from_u32(id).unwrap()
+    }
+}
+impl Clone for LogicalType {
+    fn clone(&self) -> Self {
+        let type_id = self.type_id();
+
+        Self::new(type_id)
     }
 }
 
@@ -36,5 +50,21 @@ impl Drop for LogicalType {
         unsafe {
             duckdb_destroy_logical_type(&mut self.typ);
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::constants::DuckDBType;
+    use crate::LogicalType;
+    #[test]
+    fn test_logi() {
+        let key = LogicalType::new(DuckDBType::Varchar);
+
+        let value = LogicalType::new(DuckDBType::Utinyint);
+
+        let map = LogicalType::new_map_type(&key, &value);
+
+        assert_eq!(map.type_id(), DuckDBType::Map);
     }
 }
