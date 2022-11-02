@@ -2,8 +2,10 @@ use build_script::cargo_rerun_if_changed;
 use std::path::PathBuf;
 use std::{env, path::Path};
 
-fn main() {
-    let duckdb_root = Path::new(&env::var("CARGO_MANIFEST_DIR").unwrap())
+fn main() -> miette::Result<()> {
+    let cargo_manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let cargo_manifest_dir = Path::new(&cargo_manifest_dir);
+    let duckdb_root = cargo_manifest_dir
         .join("duckdb")
         .canonicalize()
         .expect("duckdb source root");
@@ -16,10 +18,30 @@ fn main() {
         cargo_rustc_link_lib("duckdb");
         cargo_rustc_link_search(duckdb_root.join("build/debug/src"));
         cargo_rustc_link_search(duckdb_root.join("build/release/src"));
+        // env::set_var("AUTOCXX_ASAN", "1");
     }
+
+    let main_file = "src/defs.rs";
+    let duckdb = duckdb_root.join("src/include");
+    let src = cargo_manifest_dir.join("src");
+
+    let mut b = autocxx_build::Builder::new(main_file, &[&duckdb, &src])
+        .build()
+        .expect("autocxx");
+    let wrapper = "src/wrapper.cpp";
+    b.include(&duckdb)
+        .include(&src)
+        .files(vec![wrapper])
+        .flag_if_supported("-Wno-unused-parameter")
+        .flag_if_supported("-Wno-redundant-move")
+        .flag_if_supported("-std=c++14")
+        .compile("autocxx-demo"); // arbitrary library name, pick anything
+    cargo_rerun_if_changed(main_file);
+    cargo_rerun_if_changed(wrapper);
 
     // Tell cargo to invalidate the built crate whenever the wrapper changes
     cargo_rerun_if_changed(&header);
+    cargo_rerun_if_changed(&(header.to_owned() + "pp"));
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
@@ -35,7 +57,7 @@ fn main() {
         // .clang_arg("-xc++")
         // .clang_arg("-std=c++11")
         .clang_arg("-I")
-        .clang_arg(duckdb_root.join("src/include").to_string_lossy())
+        .clang_arg(duckdb.to_string_lossy())
         // .allowlist_type("duckdb::DuckDB")
         // .opaque_type("std::.*")
         .derive_debug(true)
@@ -53,4 +75,6 @@ fn main() {
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
+
+    Ok(())
 }
