@@ -1,7 +1,10 @@
 use crate::duckly::{
-    duckdb_bind_add_result_column, duckdb_bind_get_parameter, duckdb_bind_get_parameter_count,
-    duckdb_bind_info, duckdb_bind_set_bind_data, duckdb_bind_set_error,
+    duckdb_bind_add_result_column, duckdb_bind_get_extra_info, duckdb_bind_get_parameter,
+    duckdb_bind_get_parameter_count, duckdb_bind_info, duckdb_bind_set_bind_data,
+    duckdb_bind_set_cardinality, duckdb_bind_set_error, idx_t,
 };
+#[allow(unused)]
+use crate::TableFunction;
 use crate::{as_string, LogicalType, Value};
 use std::ffi::c_void;
 use std::os::raw::c_char;
@@ -58,6 +61,22 @@ impl BindInfo {
     /// returns: The value of the parameter
     pub fn get_parameter(&self, param_index: u64) -> Value {
         unsafe { Value::from(duckdb_bind_get_parameter(self.ptr, param_index)) }
+    }
+
+    /// Sets the cardinality estimate for the table function, used for optimization.
+    ///
+    /// # Arguments
+    /// * `cardinality`: The cardinality estimate
+    /// * `is_exact`: Whether or not the cardinality estimate is exact, or an approximation
+    pub fn set_cardinality(&self, cardinality: idx_t, is_exact: bool) {
+        unsafe { duckdb_bind_set_cardinality(self.ptr, cardinality, is_exact) }
+    }
+    /// Retrieves the extra info of the function as set in [`TableFunction::set_extra_info`]
+    ///
+    /// # Arguments
+    /// * `returns`: The extra info
+    pub fn get_extra_info<T>(&self) -> *const T {
+        unsafe { duckdb_bind_get_extra_info(self.ptr).cast() }
     }
 }
 

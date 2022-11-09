@@ -1,7 +1,7 @@
-use crate::constants::DuckDBType;
+use crate::constants::LogicalTypeId;
 use crate::duckly::{
-    duckdb_create_logical_type, duckdb_create_map_type, duckdb_destroy_logical_type,
-    duckdb_get_type_id, duckdb_logical_type,
+    duckdb_create_list_type, duckdb_create_logical_type, duckdb_create_map_type,
+    duckdb_destroy_logical_type, duckdb_get_type_id, duckdb_logical_type,
 };
 use num_traits::FromPrimitive;
 
@@ -11,13 +11,18 @@ pub struct LogicalType {
 }
 
 impl LogicalType {
-    pub fn new(typ: DuckDBType) -> Self {
+    pub fn new(typ: LogicalTypeId) -> Self {
         unsafe {
             Self {
                 typ: duckdb_create_logical_type(typ as u32),
             }
         }
     }
+    /// Creates a map type from its key type and value type.
+    ///
+    /// # Arguments
+    /// * `type`: The key type and value type of map type to create.
+    /// * `returns`: The logical type.
     pub fn new_map_type(key: &LogicalType, value: &LogicalType) -> Self {
         unsafe {
             Self {
@@ -25,7 +30,27 @@ impl LogicalType {
             }
         }
     }
-    pub fn type_id(&self) -> DuckDBType {
+    /// Creates a list type from its child type.
+    ///
+    /// # Arguments
+    /// * `type`: The child type of list type to create.
+    /// * `returns`: The logical type.
+    pub fn new_list_type(child_type: &LogicalType) -> Self {
+        unsafe {
+            Self {
+                typ: duckdb_create_list_type(child_type.typ),
+            }
+        }
+    }
+    pub fn new_struct_type(_names: &[&str], _types: &[&LogicalType]) -> Self {
+        todo!()
+    }
+
+    /// Retrieves the type class of a `duckdb_logical_type`.
+    ///
+    /// # Arguments
+    /// * `returns`: The type id
+    pub fn type_id(&self) -> LogicalTypeId {
         let id = unsafe { duckdb_get_type_id(self.typ) };
 
         FromPrimitive::from_u32(id).unwrap()
@@ -55,16 +80,16 @@ impl Drop for LogicalType {
 
 #[cfg(test)]
 mod test {
-    use crate::constants::DuckDBType;
+    use crate::constants::LogicalTypeId;
     use crate::LogicalType;
     #[test]
     fn test_logi() {
-        let key = LogicalType::new(DuckDBType::Varchar);
+        let key = LogicalType::new(LogicalTypeId::Varchar);
 
-        let value = LogicalType::new(DuckDBType::Utinyint);
+        let value = LogicalType::new(LogicalTypeId::Utinyint);
 
         let map = LogicalType::new_map_type(&key, &value);
 
-        assert_eq!(map.type_id(), DuckDBType::Map);
+        assert_eq!(map.type_id(), LogicalTypeId::Map);
     }
 }

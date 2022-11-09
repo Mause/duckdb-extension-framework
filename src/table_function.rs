@@ -1,8 +1,10 @@
 use crate::duckly::{
-    duckdb_create_table_function, duckdb_destroy_table_function, duckdb_table_function,
-    duckdb_table_function_add_parameter, duckdb_table_function_set_bind,
+    duckdb_create_table_function, duckdb_delete_callback_t, duckdb_destroy_table_function,
+    duckdb_table_function, duckdb_table_function_add_parameter, duckdb_table_function_init_t,
+    duckdb_table_function_set_bind, duckdb_table_function_set_extra_info,
     duckdb_table_function_set_function, duckdb_table_function_set_init,
-    duckdb_table_function_set_name, duckdb_table_function_supports_projection_pushdown,
+    duckdb_table_function_set_local_init, duckdb_table_function_set_name,
+    duckdb_table_function_supports_projection_pushdown,
 };
 use crate::logical_type::LogicalType;
 use std::ffi::{c_void, CString};
@@ -101,6 +103,29 @@ impl TableFunction {
             duckdb_table_function_set_name(self.ptr, string.as_ptr());
         }
         self
+    }
+
+    /// Assigns extra information to the table function that can be fetched during binding, etc.
+    ///
+    /// # Arguments
+    /// * `extra_info`: The extra information
+    /// * `destroy`: The callback that will be called to destroy the bind data (if any)
+    ///
+    /// # Safety
+    pub unsafe fn set_extra_info(
+        &self,
+        extra_info: *mut c_void,
+        destroy: duckdb_delete_callback_t,
+    ) {
+        unsafe { duckdb_table_function_set_extra_info(self.ptr, extra_info, destroy) };
+    }
+
+    /// Sets the thread-local init function of the table function
+    ///
+    /// # Arguments
+    /// * `init`: The init function
+    pub fn set_local_init(&self, init: duckdb_table_function_init_t) {
+        unsafe { duckdb_table_function_set_local_init(self.ptr, init) };
     }
 }
 impl Default for TableFunction {
