@@ -3,6 +3,8 @@ use crate::duckly::{
     duckdb_bind_get_parameter_count, duckdb_bind_info, duckdb_bind_set_bind_data,
     duckdb_bind_set_cardinality, duckdb_bind_set_error, idx_t,
 };
+#[allow(unused)]
+use crate::TableFunction;
 use crate::{as_string, LogicalType, Value};
 use std::ffi::c_void;
 use std::os::raw::c_char;
@@ -69,7 +71,7 @@ impl BindInfo {
     pub fn set_cardinality(&self, cardinality: idx_t, is_exact: bool) {
         unsafe { duckdb_bind_set_cardinality(self.ptr, cardinality, is_exact) }
     }
-    /// Retrieves the extra info of the function as set in [`TableFunction#set_extra_info`]
+    /// Retrieves the extra info of the function as set in [`TableFunction::set_extra_info`]
     ///
     /// # Arguments
     /// * `returns`: The extra info
