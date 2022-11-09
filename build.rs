@@ -19,7 +19,7 @@ fn main() {
     }
 
     // Tell cargo to invalidate the built crate whenever the wrapper changes
-    cargo_rerun_if_changed(&header);
+    cargo_rerun_if_changed(header);
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
