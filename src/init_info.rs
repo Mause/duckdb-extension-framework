@@ -1,3 +1,5 @@
+#[allow(unused)]
+use crate::{BindInfo, TableFunction};
 use std::ffi::{c_void, CString};
 
 use crate::duckly::{
@@ -42,14 +44,14 @@ impl InitInfo {
         indices
     }
 
-    /// Retrieves the extra info of the function as set in [`TableFunction#set_extra_info`]
+    /// Retrieves the extra info of the function as set in [`TableFunction::set_extra_info`]
     ///
     /// # Arguments
     /// * `returns`: The extra info
     pub fn get_extra_info<T>(&self) -> *const T {
         unsafe { duckdb_init_get_extra_info(self.0).cast() }
     }
-    /// Gets the bind data set by [`BindInfo#set_bind_data`] during the bind.
+    /// Gets the bind data set by [`BindInfo::set_bind_data`] during the bind.
     ///
     /// Note that the bind data should be considered as read-only.
     /// For tracking state, use the init data instead.

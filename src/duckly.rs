@@ -4,5 +4,6 @@
 #![allow(unused)]
 #![allow(improper_ctypes)]
 #![allow(clippy::upper_case_acronyms)]
+#![allow(rustdoc::broken_intra_doc_links)]
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
