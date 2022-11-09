@@ -1,7 +1,7 @@
 use crate::constants::DuckDBType;
 use crate::duckly::{
-    duckdb_create_logical_type, duckdb_create_map_type, duckdb_destroy_logical_type,
-    duckdb_get_type_id, duckdb_logical_type,
+    duckdb_create_list_type, duckdb_create_logical_type, duckdb_create_map_type,
+    duckdb_destroy_logical_type, duckdb_get_type_id, duckdb_logical_type,
 };
 use num_traits::FromPrimitive;
 
@@ -18,6 +18,11 @@ impl LogicalType {
             }
         }
     }
+    /// Creates a map type from its key type and value type.
+    ///
+    /// # Arguments
+    /// * `type`: The key type and value type of map type to create.
+    /// * `returns`: The logical type.
     pub fn new_map_type(key: &LogicalType, value: &LogicalType) -> Self {
         unsafe {
             Self {
@@ -25,6 +30,26 @@ impl LogicalType {
             }
         }
     }
+    /// Creates a list type from its child type.
+    ///
+    /// # Arguments
+    /// * `type`: The child type of list type to create.
+    /// * `returns`: The logical type.
+    pub fn new_list_type(child_type: &LogicalType) -> Self {
+        unsafe {
+            Self {
+                typ: duckdb_create_list_type(child_type.typ),
+            }
+        }
+    }
+    pub fn new_struct_type(_names: &[&str], _types: &[&LogicalType]) -> Self {
+        todo!()
+    }
+
+    /// Retrieves the type class of a `duckdb_logical_type`.
+    ///
+    /// # Arguments
+    /// * `returns`: The type id
     pub fn type_id(&self) -> DuckDBType {
         let id = unsafe { duckdb_get_type_id(self.typ) };
 

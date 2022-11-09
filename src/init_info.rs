@@ -1,8 +1,9 @@
-use std::ffi::c_void;
+use std::ffi::{c_void, CString};
 
 use crate::duckly::{
-    duckdb_init_get_column_count, duckdb_init_get_column_index, duckdb_init_info,
-    duckdb_init_set_init_data, idx_t,
+    duckdb_init_get_bind_data, duckdb_init_get_column_count, duckdb_init_get_column_index,
+    duckdb_init_get_extra_info, duckdb_init_info, duckdb_init_set_error, duckdb_init_set_init_data,
+    duckdb_init_set_max_threads, idx_t,
 };
 
 #[derive(Debug)]
@@ -39,5 +40,37 @@ impl InitInfo {
             }
         }
         indices
+    }
+
+    /// Retrieves the extra info of the function as set in [`TableFunction#set_extra_info`]
+    ///
+    /// # Arguments
+    /// * `returns`: The extra info
+    pub fn get_extra_info<T>(&self) -> *const T {
+        unsafe { duckdb_init_get_extra_info(self.0).cast() }
+    }
+    /// Gets the bind data set by [`BindInfo#set_bind_data`] during the bind.
+    ///
+    /// Note that the bind data should be considered as read-only.
+    /// For tracking state, use the init data instead.
+    ///
+    /// # Arguments
+    /// * `returns`: The bind data object
+    pub fn get_bind_data<T>(&self) -> *const T {
+        unsafe { duckdb_init_get_bind_data(self.0).cast() }
+    }
+    /// Sets how many threads can process this table function in parallel (default: 1)
+    ///
+    /// # Arguments
+    /// * `max_threads`: The maximum amount of threads that can process this table function
+    pub fn set_max_threads(&self, max_threads: idx_t) {
+        unsafe { duckdb_init_set_max_threads(self.0, max_threads) }
+    }
+    /// Report that an error has occurred while calling init.
+    ///
+    /// # Arguments
+    /// * `error`: The error message
+    pub fn set_error(&self, error: CString) {
+        unsafe { duckdb_init_set_error(self.0, error.as_ptr()) }
     }
 }
