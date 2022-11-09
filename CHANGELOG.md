@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/Mause/duckdb-extension-framework/compare/v0.4.0...v0.4.1) (2022-11-09)
+
+
+### Bug Fixes
+
+* correct LogicalTypeId enum name ([9dbebbb](https://github.com/Mause/duckdb-extension-framework/commit/9dbebbbc52213871f3bc0b75e3b606544f758ff6))
+
 ## [0.4.0](https://github.com/Mause/duckdb-extension-framework/compare/v0.3.0...v0.4.0) (2022-11-09)
 
 
