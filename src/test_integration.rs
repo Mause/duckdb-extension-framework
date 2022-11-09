@@ -1,4 +1,4 @@
-use crate::constants::DuckDBType;
+use crate::constants::LogicalTypeId;
 use crate::database::Database;
 use crate::duckly::{
     duckdb_bind_info, duckdb_data_chunk, duckdb_function_info, duckdb_init_info, duckdb_query,
@@ -53,7 +53,7 @@ unsafe extern "C" fn init(info: duckdb_init_info) {
 unsafe extern "C" fn bind(info: duckdb_bind_info) {
     let info = BindInfo::from(info);
 
-    info.add_result_column("column0", LogicalType::new(DuckDBType::Varchar));
+    info.add_result_column("column0", LogicalType::new(LogicalTypeId::Varchar));
 
     let param = info.get_parameter(0).get_varchar();
 
@@ -67,7 +67,7 @@ fn test_database_creation() -> Result<(), Box<dyn Error>> {
 
     let table_function = TableFunction::default();
     table_function
-        .add_parameter(&LogicalType::new(DuckDBType::Json))
+        .add_parameter(&LogicalType::new(LogicalTypeId::Json))
         .set_name("read_json")
         .supports_pushdown(false)
         .set_function(Some(func))

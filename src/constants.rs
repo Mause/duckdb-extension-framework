@@ -1,7 +1,7 @@
 use crate::duckly::*;
 
 #[derive(Debug, Eq, PartialEq, num_derive::FromPrimitive)]
-pub enum DuckDBType {
+pub enum LogicalTypeId {
     Boolean = DUCKDB_TYPE_DUCKDB_TYPE_BOOLEAN as isize,
     Tinyint = DUCKDB_TYPE_DUCKDB_TYPE_TINYINT as isize,
     Smallint = DUCKDB_TYPE_DUCKDB_TYPE_SMALLINT as isize,
