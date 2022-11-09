@@ -1,3 +1,10 @@
+#![deny(rustdoc::bare_urls)]
+#![warn(rustdoc::invalid_html_tags)]
+#![warn(rustdoc::private_doc_tests)]
+#![warn(rustdoc::missing_crate_level_docs)]
+#![deny(rustdoc::private_intra_doc_links)]
+#![deny(rustdoc::broken_intra_doc_links)]
+
 //! This crate facilitates development of DuckDB extensions using Rust
 
 mod bind_info;
