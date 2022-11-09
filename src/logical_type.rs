@@ -1,4 +1,4 @@
-use crate::constants::DuckDBType;
+use crate::constants::LogicalTypeId;
 use crate::duckly::{
     duckdb_create_list_type, duckdb_create_logical_type, duckdb_create_map_type,
     duckdb_destroy_logical_type, duckdb_get_type_id, duckdb_logical_type,
@@ -11,7 +11,7 @@ pub struct LogicalType {
 }
 
 impl LogicalType {
-    pub fn new(typ: DuckDBType) -> Self {
+    pub fn new(typ: LogicalTypeId) -> Self {
         unsafe {
             Self {
                 typ: duckdb_create_logical_type(typ as u32),
@@ -50,7 +50,7 @@ impl LogicalType {
     ///
     /// # Arguments
     /// * `returns`: The type id
-    pub fn type_id(&self) -> DuckDBType {
+    pub fn type_id(&self) -> LogicalTypeId {
         let id = unsafe { duckdb_get_type_id(self.typ) };
 
         FromPrimitive::from_u32(id).unwrap()
@@ -80,16 +80,16 @@ impl Drop for LogicalType {
 
 #[cfg(test)]
 mod test {
-    use crate::constants::DuckDBType;
+    use crate::constants::LogicalTypeId;
     use crate::LogicalType;
     #[test]
     fn test_logi() {
-        let key = LogicalType::new(DuckDBType::Varchar);
+        let key = LogicalType::new(LogicalTypeId::Varchar);
 
-        let value = LogicalType::new(DuckDBType::Utinyint);
+        let value = LogicalType::new(LogicalTypeId::Utinyint);
 
         let map = LogicalType::new_map_type(&key, &value);
 
-        assert_eq!(map.type_id(), DuckDBType::Map);
+        assert_eq!(map.type_id(), LogicalTypeId::Map);
     }
 }

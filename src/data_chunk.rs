@@ -91,7 +91,7 @@ mod test {
     #[test]
     fn test_data_chunk_construction() {
         let dc = DataChunk::new(vec![LogicalType::new(
-            crate::constants::DuckDBType::Integer,
+            crate::constants::LogicalTypeId::Integer,
         )]);
 
         assert_eq!(dc.get_column_count(), 1);
