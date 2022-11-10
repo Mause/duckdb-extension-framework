@@ -1,7 +1,8 @@
 use crate::check;
 use crate::database::DatabaseOwnership::{Borrowed, Owned};
 use crate::duckly::{
-    duckdb_close, duckdb_connect, duckdb_connection, duckdb_database, duckdb_open,
+    duckdb_add_replacement_scan, duckdb_close, duckdb_connect, duckdb_connection, duckdb_database,
+    duckdb_delete_callback_t, duckdb_open, duckdb_replacement_callback_t,
 };
 use crate::Connection;
 use std::error::Error;
@@ -42,16 +43,38 @@ impl Database {
     pub fn connect(&self) -> Result<Connection, Box<dyn Error>> {
         let mut connection: duckdb_connection = null_mut();
 
-        let db = match &self.0 {
-            Borrowed(wrapper) => addr_of!(wrapper) as duckdb_database,
-            Owned(ptr) => *ptr,
-        };
+        let db = self.get_ptr();
 
         unsafe {
             check!(duckdb_connect(db, &mut connection));
         }
 
         Ok(Connection::from(connection))
+    }
+
+    fn get_ptr(&self) -> duckdb_database {
+        match &self.0 {
+            Borrowed(wrapper) => addr_of!(wrapper) as duckdb_database,
+            Owned(ptr) => *ptr,
+        }
+    }
+
+    /// Add a replacement scan definition to the specified database
+    ///
+    /// # Safety
+    /// The `extra_data` arg should live as long as the database
+    ///
+    /// # Arguments
+    /// * `replacement`: The replacement scan callback
+    /// * `extra_data`: Extra data that is passed back into the specified callback
+    /// * `delete_callback`: The delete callback to call on the extra data, if any
+    pub unsafe fn add_replacement_scan(
+        &self,
+        replacement: duckdb_replacement_callback_t,
+        extra_data: *mut c_void,
+        delete_callback: duckdb_delete_callback_t,
+    ) {
+        duckdb_add_replacement_scan(self.get_ptr(), replacement, extra_data, delete_callback);
     }
 }
 

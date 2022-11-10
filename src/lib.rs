@@ -18,6 +18,7 @@ mod error;
 mod function_info;
 mod init_info;
 mod logical_type;
+mod replacement_scan;
 mod table_function;
 #[cfg(test)]
 mod test_integration;
@@ -33,6 +34,7 @@ pub use crate::database::Database;
 pub use crate::function_info::FunctionInfo;
 pub use crate::init_info::InitInfo;
 pub use crate::logical_type::LogicalType;
+pub use crate::replacement_scan::ReplacementScanInfo;
 pub use crate::table_function::TableFunction;
 pub use crate::value::Value;
 pub use crate::vector::Vector;
