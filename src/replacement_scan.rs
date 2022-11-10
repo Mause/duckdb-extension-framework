@@ -30,3 +30,9 @@ impl ReplacementScanInfo {
         }
     }
 }
+
+impl From<duckdb_replacement_scan_info> for ReplacementScanInfo {
+    fn from(value: duckdb_replacement_scan_info) -> Self {
+        Self(value)
+    }
+}
