@@ -1,5 +1,5 @@
 #include "duckdb.hpp"
-#include "wrapper.h"
+#include "wrapper.hpp"
 
 #include <memory>
 
@@ -15,6 +15,8 @@ getVector(idx_t n_pairs, const char *const *names, duckdb_logical_type const *ty
     return members;
 }
 
+extern "C" {
+
 duckdb_logical_type duckdb_create_struct_type(idx_t n_pairs, const char **names, const duckdb_logical_type *types) {
     auto *stype = new duckdb::LogicalType;
     *stype = duckdb::LogicalType::STRUCT(getVector(n_pairs, names, types));
@@ -25,4 +27,6 @@ duckdb_logical_type duckdb_create_union(idx_t nmembers, const char **names, cons
     auto *utype = new duckdb::LogicalType;
     *utype = duckdb::LogicalType::UNION(getVector(nmembers, names, types));
     return utype;
+}
+
 }

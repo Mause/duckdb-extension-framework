@@ -8,7 +8,7 @@ fn main() {
         .canonicalize()
         .expect("duckdb source root");
 
-    let header = "src/wrapper.h";
+    let header = "src/wrapper.hpp";
 
     #[cfg(feature = "statically_linked")]
     {
@@ -33,7 +33,7 @@ fn main() {
         // .generate_comments(true)
         // .derive_default(true)
         // Tell bindgen we are processing c++
-        // .clang_arg("-xc++")
+        .clang_arg("-xc++")
         // .clang_arg("-std=c++11")
         .clang_arg("-I")
         .clang_arg(duckdb_include.to_string_lossy())
