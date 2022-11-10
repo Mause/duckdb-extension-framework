@@ -126,6 +126,7 @@ impl Drop for LogicalType {
 mod test {
     use crate::constants::LogicalTypeId;
     use crate::LogicalType;
+    use std::collections::HashMap;
     #[test]
     fn test_logi() {
         let key = LogicalType::new(LogicalTypeId::Varchar);
@@ -135,5 +136,17 @@ mod test {
         let map = LogicalType::new_map_type(&key, &value);
 
         assert_eq!(map.type_id(), LogicalTypeId::Map);
+
+        let union_ = LogicalType::new_union_type(HashMap::from([
+            ("number", LogicalType::new(LogicalTypeId::Bigint)),
+            ("string", LogicalType::new(LogicalTypeId::Varchar)),
+        ]));
+        assert_eq!(union_.type_id(), LogicalTypeId::Union);
+
+        let struct_ = LogicalType::new_struct_type(HashMap::from([
+            ("number", LogicalType::new(LogicalTypeId::Bigint)),
+            ("string", LogicalType::new(LogicalTypeId::Varchar)),
+        ]));
+        assert_eq!(struct_.type_id(), LogicalTypeId::Struct);
     }
 }
