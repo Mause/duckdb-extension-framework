@@ -1,9 +1,13 @@
 use crate::constants::LogicalTypeId;
 use crate::duckly::{
     duckdb_create_list_type, duckdb_create_logical_type, duckdb_create_map_type,
-    duckdb_destroy_logical_type, duckdb_get_type_id, duckdb_logical_type,
+    duckdb_create_struct_type, duckdb_create_union, duckdb_destroy_logical_type,
+    duckdb_get_type_id, duckdb_logical_type, idx_t,
 };
 use num_traits::FromPrimitive;
+use std::collections::HashMap;
+use std::ffi::{c_char, CString};
+use std::ops::Deref;
 
 #[derive(Debug)]
 pub struct LogicalType {
@@ -42,8 +46,48 @@ impl LogicalType {
             }
         }
     }
-    pub fn new_struct_type(_names: &[&str], _types: &[&LogicalType]) -> Self {
-        todo!()
+    /// Make `LogicalType` for `struct`
+    ///
+    /// # Argument
+    /// `shape` should be the fields and types in the `struct`
+    pub fn new_struct_type(shape: HashMap<&str, LogicalType>) -> Self {
+        Self::make_meta_type(shape, duckdb_create_struct_type)
+    }
+    /// Make `LogicalType` for `union`
+    ///
+    /// # Argument
+    /// `shape` should be the variants in the `union`
+    pub fn new_union_type(shape: HashMap<&str, LogicalType>) -> Self {
+        Self::make_meta_type(shape, duckdb_create_union)
+    }
+
+    fn make_meta_type(
+        shape: HashMap<&str, LogicalType>,
+        x: unsafe extern "C" fn(
+            nmembers: idx_t,
+            names: *mut *const c_char,
+            types: *const duckdb_logical_type,
+        ) -> duckdb_logical_type,
+    ) -> LogicalType {
+        let keys: Vec<CString> = shape
+            .keys()
+            .map(|it| CString::new(it.deref()).unwrap())
+            .collect();
+        let values: Vec<duckdb_logical_type> = shape.values().map(|it| it.typ).collect();
+        let name_ptrs = keys
+            .iter()
+            .map(|it| it.as_ptr())
+            .collect::<Vec<*const c_char>>();
+
+        unsafe {
+            Self {
+                typ: x(
+                    shape.len().try_into().unwrap(),
+                    name_ptrs.as_slice().as_ptr().cast_mut(),
+                    values.as_slice().as_ptr(),
+                ),
+            }
+        }
     }
 
     /// Retrieves the type class of a `duckdb_logical_type`.
@@ -82,6 +126,7 @@ impl Drop for LogicalType {
 mod test {
     use crate::constants::LogicalTypeId;
     use crate::LogicalType;
+    use std::collections::HashMap;
     #[test]
     fn test_logi() {
         let key = LogicalType::new(LogicalTypeId::Varchar);
@@ -91,5 +136,17 @@ mod test {
         let map = LogicalType::new_map_type(&key, &value);
 
         assert_eq!(map.type_id(), LogicalTypeId::Map);
+
+        let union_ = LogicalType::new_union_type(HashMap::from([
+            ("number", LogicalType::new(LogicalTypeId::Bigint)),
+            ("string", LogicalType::new(LogicalTypeId::Varchar)),
+        ]));
+        assert_eq!(union_.type_id(), LogicalTypeId::Union);
+
+        let struct_ = LogicalType::new_struct_type(HashMap::from([
+            ("number", LogicalType::new(LogicalTypeId::Bigint)),
+            ("string", LogicalType::new(LogicalTypeId::Varchar)),
+        ]));
+        assert_eq!(struct_.type_id(), LogicalTypeId::Struct);
     }
 }

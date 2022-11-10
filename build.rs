@@ -8,7 +8,7 @@ fn main() {
         .canonicalize()
         .expect("duckdb source root");
 
-    let header = "src/wrapper.h";
+    let header = "src/wrapper.hpp";
 
     #[cfg(feature = "statically_linked")]
     {
@@ -24,6 +24,7 @@ fn main() {
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
+    let duckdb_include = duckdb_root.join("src/include");
     let bindings = bindgen::Builder::default()
         // The input header we would like to generate
         // bindings for.
@@ -32,10 +33,10 @@ fn main() {
         // .generate_comments(true)
         // .derive_default(true)
         // Tell bindgen we are processing c++
-        // .clang_arg("-xc++")
+        .clang_arg("-xc++")
         // .clang_arg("-std=c++11")
         .clang_arg("-I")
-        .clang_arg(duckdb_root.join("src/include").to_string_lossy())
+        .clang_arg(duckdb_include.to_string_lossy())
         // .allowlist_type("duckdb::DuckDB")
         // .opaque_type("std::.*")
         .derive_debug(true)
@@ -53,4 +54,13 @@ fn main() {
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
+
+    cc::Build::new()
+        .include(duckdb_include)
+        .flag_if_supported("-Wno-unused-parameter")
+        .flag_if_supported("-Wno-redundant-move")
+        .flag_if_supported("-std=c++14")
+        .cpp(true)
+        .file("src/wrapper.cpp")
+        .compile("duckdb_extension_framework");
 }

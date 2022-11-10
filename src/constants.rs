@@ -29,5 +29,6 @@ pub enum LogicalTypeId {
     Struct = DUCKDB_TYPE_DUCKDB_TYPE_STRUCT as isize,
     Map = DUCKDB_TYPE_DUCKDB_TYPE_MAP as isize,
     Uuid = DUCKDB_TYPE_DUCKDB_TYPE_UUID as isize,
+    Union = DUCKDB_TYPE_DUCKDB_TYPE_UNION as isize,
     Json = DUCKDB_TYPE_DUCKDB_TYPE_JSON as isize,
 }
