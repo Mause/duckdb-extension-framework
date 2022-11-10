@@ -3,8 +3,8 @@ use crate::duckly::{
     duckdb_create_list_type, duckdb_create_logical_type, duckdb_create_map_type,
     duckdb_create_union, duckdb_destroy_logical_type, duckdb_get_type_id, duckdb_logical_type,
 };
-use std::collections::HashMap;
 use num_traits::FromPrimitive;
+use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct LogicalType {
