@@ -1,7 +1,8 @@
 use crate::constants::LogicalTypeId;
 use crate::duckly::{
     duckdb_create_list_type, duckdb_create_logical_type, duckdb_create_map_type,
-    duckdb_create_union, duckdb_destroy_logical_type, duckdb_get_type_id, duckdb_logical_type,
+    duckdb_create_struct_type, duckdb_create_union, duckdb_destroy_logical_type,
+    duckdb_get_type_id, duckdb_logical_type, idx_t,
 };
 use num_traits::FromPrimitive;
 use std::collections::HashMap;
@@ -45,25 +46,44 @@ impl LogicalType {
             }
         }
     }
-    pub fn new_struct_type(_names: &[&str], _types: &[&LogicalType]) -> Self {
-        todo!()
+    /// Make `LogicalType` for `struct`
+    ///
+    /// # Argument
+    /// `shape` should be the fields and types in the `struct`
+    pub fn new_struct_type(shape: HashMap<&str, LogicalType>) -> Self {
+        Self::make_meta_type(shape, duckdb_create_struct_type)
     }
+    /// Make `LogicalType` for `union`
+    ///
+    /// # Argument
+    /// `shape` should be the variants in the `union`
     pub fn new_union_type(shape: HashMap<&str, LogicalType>) -> Self {
+        Self::make_meta_type(shape, duckdb_create_union)
+    }
+
+    fn make_meta_type(
+        shape: HashMap<&str, LogicalType>,
+        x: unsafe extern "C" fn(
+            nmembers: idx_t,
+            names: *mut *const c_char,
+            types: *const duckdb_logical_type,
+        ) -> duckdb_logical_type,
+    ) -> LogicalType {
+        let keys: Vec<CString> = shape
+            .keys()
+            .map(|it| CString::new(it.deref()).unwrap())
+            .collect();
+        let values: Vec<duckdb_logical_type> = shape.values().map(|it| it.typ).collect();
+        let name_ptrs = keys
+            .iter()
+            .map(|it| it.as_ptr())
+            .collect::<Vec<*const c_char>>();
+
         unsafe {
-            let keys: Vec<CString> = shape
-                .keys()
-                .map(|it| CString::new(it.deref()).unwrap())
-                .collect();
-            let values: Vec<duckdb_logical_type> = shape.values().map(|it| it.typ).collect();
             Self {
-                typ: duckdb_create_union(
+                typ: x(
                     shape.len().try_into().unwrap(),
-                    keys.iter()
-                        .map(|it| it.as_ptr())
-                        .collect::<Vec<*const c_char>>()
-                        .as_slice()
-                        .as_ptr()
-                        .cast_mut(),
+                    name_ptrs.as_slice().as_ptr().cast_mut(),
                     values.as_slice().as_ptr(),
                 ),
             }
