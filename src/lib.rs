@@ -4,6 +4,7 @@
 #![warn(rustdoc::missing_crate_level_docs)]
 #![deny(rustdoc::private_intra_doc_links)]
 #![deny(rustdoc::broken_intra_doc_links)]
+#![deny(unused_unsafe)]
 
 //! This crate facilitates development of DuckDB extensions using Rust
 
