@@ -5,6 +5,7 @@ use crate::duckly::{
 };
 use num_traits::FromPrimitive;
 use std::collections::HashMap;
+use std::ffi::CString;
 
 #[derive(Debug)]
 pub struct LogicalType {
