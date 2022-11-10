@@ -7,9 +7,9 @@ use crate::duckly::{
     duckdb_table_function_supports_projection_pushdown,
 };
 use crate::logical_type::LogicalType;
-use std::ffi::{c_void, CString};
 #[allow(unused)]
 use crate::InitInfo;
+use std::ffi::{c_void, CString};
 
 /// A function that returns a queryable table
 #[derive(Debug)]
