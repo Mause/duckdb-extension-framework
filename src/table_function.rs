@@ -8,6 +8,8 @@ use crate::duckly::{
 };
 use crate::logical_type::LogicalType;
 use std::ffi::{c_void, CString};
+#[allow(unused)]
+use crate::InitInfo;
 
 /// A function that returns a queryable table
 #[derive(Debug)]
@@ -27,7 +29,7 @@ impl TableFunction {
     /// Sets whether or not the given table function supports projection pushdown.
     ///
     /// If this is set to true, the system will provide a list of all required columns in the `init` stage through
-    /// the `InitInfo::get_column_indices` method.
+    /// the [`InitInfo::get_column_indices`] method.
     /// If this is set to false (the default), the system will expect all columns to be projected.
     ///
     /// # Arguments
