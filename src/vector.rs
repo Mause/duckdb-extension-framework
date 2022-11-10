@@ -8,19 +8,22 @@ use crate::{
     },
     LogicalType,
 };
-use std::ffi::{c_char, c_void};
 use std::fmt::Debug;
+use std::{
+    ffi::{c_char, c_void},
+    marker::PhantomData,
+};
 
 /// Vector of values of a specified PhysicalType.
-pub struct Vector(duckdb_vector);
+pub struct Vector<T>(duckdb_vector, PhantomData<T>);
 
-impl From<duckdb_vector> for Vector {
+impl<T> From<duckdb_vector> for Vector<T> {
     fn from(ptr: duckdb_vector) -> Self {
-        Self(ptr)
+        Self(ptr, PhantomData {})
     }
 }
 
-impl Vector {
+impl<T> Vector<T> {
     /// Retrieves the data pointer of the vector.
     ///
     /// The data pointer can be used to read or write values from the vector. How to read or write values depends on the type of the vector.
@@ -134,5 +137,18 @@ impl ValidityMask {
     ///  * `row`: The row index
     pub fn set_row_valid(&self, row: idx_t) {
         unsafe { duckdb_validity_set_row_valid(self.0, row) }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::constants::LogicalTypeId;
+    use crate::{DataChunk, LogicalType};
+
+    #[test]
+    fn test_vector() {
+        let datachunk = DataChunk::new(vec![LogicalType::new(LogicalTypeId::Bigint)]);
+        let vector = datachunk.get_vector::<u64>(0);
+        vector.get_data();
     }
 }

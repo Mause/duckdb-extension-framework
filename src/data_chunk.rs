@@ -49,7 +49,7 @@ impl DataChunk {
     /// The pointer to the vector is valid for as long as the chunk is alive.
     /// It does NOT need to be destroyed.
     ///
-    pub fn get_vector(&self, column_index: idx_t) -> Vector {
+    pub fn get_vector<T>(&self, column_index: idx_t) -> Vector<T> {
         Vector::from(unsafe { duckdb_data_chunk_get_vector(self.ptr, column_index) })
     }
     /// Sets the current number of tuples in a data chunk.
