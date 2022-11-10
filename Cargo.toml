@@ -19,7 +19,11 @@ statically_linked = []
 [dependencies]
 num-traits = "0.2.15"
 num-derive = "0.3.3"
+cxx = "1.0.80"
+autocxx = "0.22.4"
 
 [build-dependencies]
+autocxx-build = "0.22.4"
 bindgen = "0.61.0"
 build_script = "0.2.0"
+miette = "5.4.1"

@@ -13,11 +13,13 @@ mod connection;
 pub mod constants;
 mod data_chunk;
 mod database;
+mod defs;
 pub mod duckly;
 mod error;
 mod function_info;
 mod init_info;
 mod logical_type;
+mod scalar_function;
 mod table_function;
 #[cfg(test)]
 mod test_integration;
