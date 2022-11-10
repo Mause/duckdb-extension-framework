@@ -5,7 +5,8 @@ use crate::duckly::{
 };
 use num_traits::FromPrimitive;
 use std::collections::HashMap;
-use std::ffi::CString;
+use std::ffi::{c_char, CString};
+use std::ops::Deref;
 
 #[derive(Debug)]
 pub struct LogicalType {
@@ -49,10 +50,22 @@ impl LogicalType {
     }
     pub fn new_union_type(shape: HashMap<&str, LogicalType>) -> Self {
         unsafe {
-            let keys: Vec<CString> = shape.keys().map(|it| CString::new(it).unwrap()).collect();
+            let keys: Vec<CString> = shape
+                .keys()
+                .map(|it| CString::new(it.deref()).unwrap())
+                .collect();
             let values: Vec<duckdb_logical_type> = shape.values().map(|it| it.typ).collect();
             Self {
-                typ: duckdb_create_union(shape.len().try_into().unwrap(), &keys, &values),
+                typ: duckdb_create_union(
+                    shape.len().try_into().unwrap(),
+                    keys.iter()
+                        .map(|it| it.as_ptr())
+                        .collect::<Vec<*const c_char>>()
+                        .as_slice()
+                        .as_ptr()
+                        .cast_mut(),
+                    values.as_slice().as_ptr(),
+                ),
             }
         }
     }
