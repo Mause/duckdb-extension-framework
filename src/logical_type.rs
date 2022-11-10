@@ -1,7 +1,7 @@
 use crate::constants::LogicalTypeId;
 use crate::duckly::{
     duckdb_create_list_type, duckdb_create_logical_type, duckdb_create_map_type,
-    duckdb_destroy_logical_type, duckdb_get_type_id, duckdb_logical_type,
+    duckdb_destroy_logical_type, duckdb_get_type_id, duckdb_logical_type, duckdb_create_union
 };
 use num_traits::FromPrimitive;
 
@@ -44,6 +44,17 @@ impl LogicalType {
     }
     pub fn new_struct_type(_names: &[&str], _types: &[&LogicalType]) -> Self {
         todo!()
+    }
+    pub fn new_union_type(shape: HashMap<&str, LogicalType>) -> Self {
+        union {
+            Self {
+                typ: duckdb_create_union(
+                    shape.len(),
+                    shape.keys(),
+                    shape.values()
+                )
+            }
+        }
     }
 
     /// Retrieves the type class of a `duckdb_logical_type`.
