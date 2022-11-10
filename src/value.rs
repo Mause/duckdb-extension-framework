@@ -4,7 +4,7 @@ use std::ffi::CString;
 /// The Value object holds a single arbitrary value of any type that can be
 /// stored in the database.
 #[derive(Debug)]
-pub struct Value(duckdb_value);
+pub struct Value(pub(crate) duckdb_value);
 
 impl Value {
     /// Obtains a string representation of the given value
