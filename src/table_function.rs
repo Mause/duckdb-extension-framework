@@ -119,7 +119,7 @@ impl TableFunction {
         extra_info: *mut c_void,
         destroy: duckdb_delete_callback_t,
     ) {
-        unsafe { duckdb_table_function_set_extra_info(self.ptr, extra_info, destroy) };
+        duckdb_table_function_set_extra_info(self.ptr, extra_info, destroy);
     }
 
     /// Sets the thread-local init function of the table function
