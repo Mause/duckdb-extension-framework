@@ -48,8 +48,10 @@ impl LogicalType {
     }
     pub fn new_union_type(shape: HashMap<&str, LogicalType>) -> Self {
         unsafe {
+            let keys: Vec<CString> = shape.keys().map(|it| CString::new(it).unwrap()).collect();
+            let values: Vec<duckdb_logical_type> = shape.values().map(|it| it.typ).collect();
             Self {
-                typ: duckdb_create_union(shape.len(), shape.keys(), shape.values()),
+                typ: duckdb_create_union(shape.len().try_into().unwrap(), &keys, &values),
             }
         }
     }
