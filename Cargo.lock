@@ -46,6 +46,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "cc"
+version = "1.0.76"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "76a284da2e6fe2092f2353e51713435363112dfd60030e22add80be333fb928f"
+
+[[package]]
 name = "cexpr"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -77,6 +83,7 @@ version = "0.4.1"
 dependencies = [
  "bindgen",
  "build_script",
+ "cc",
  "num-derive",
  "num-traits",
 ]
