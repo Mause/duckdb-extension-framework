@@ -31,7 +31,7 @@ unsafe extern "C" fn func(info: duckdb_function_info, output: duckdb_data_chunk)
     } else {
         (*init_info).done = true;
 
-        let vector = output.get_vector(0);
+        let vector = output.get_vector::<&str>(0);
 
         let string = CString::new("hello world").expect("unable to build string");
         vector.assign_string_element(0, string.as_ptr());
