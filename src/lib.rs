@@ -13,6 +13,7 @@ mod connection;
 pub mod constants;
 mod data_chunk;
 mod database;
+mod defs;
 pub mod duckly;
 mod error;
 mod function_info;

@@ -46,7 +46,7 @@ jobs:
         rm -rf duckdb/*
 
     - working-directory: duckdb
-      run: git checkout src/include/duckdb.h
+      run: git checkout src/include
 
     - uses: katyo/publish-crates@v1
       if: github.ref == 'refs/heads/main'
