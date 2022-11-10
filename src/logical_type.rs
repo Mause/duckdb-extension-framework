@@ -46,7 +46,7 @@ impl LogicalType {
         todo!()
     }
     pub fn new_union_type(shape: HashMap<&str, LogicalType>) -> Self {
-        union {
+        unsafe {
             Self {
                 typ: duckdb_create_union(
                     shape.len(),
