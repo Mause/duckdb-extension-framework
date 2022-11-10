@@ -1,5 +1,5 @@
 #[allow(unused)]
-use crate::{BindInfo, TableFunction};
+use crate::table_functions::{BindInfo, TableFunction};
 use std::ffi::{c_void, CString};
 
 use crate::duckly::{
