@@ -1,5 +1,6 @@
+use crate::check;
 use crate::duckly::{duckdb_connection, duckdb_disconnect, duckdb_register_table_function};
-use crate::{check, TableFunction};
+use crate::table_functions::TableFunction;
 
 /// A connection to a database. This represents a (client) connection that can
 /// be used to query the database.
