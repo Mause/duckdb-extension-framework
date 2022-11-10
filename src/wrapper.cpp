@@ -3,9 +3,9 @@
 
 #include <memory>
 
-static std::vector<std::pair<std::string, duckdb::LogicalType>>
+static duckdb::child_list_t<duckdb::LogicalType>
 getVector(idx_t n_pairs, const char *const *names, duckdb_logical_type const *types) {
-    std::vector<std::pair<std::string, duckdb::LogicalType>> members;
+    duckdb::child_list_t<duckdb::LogicalType> members;
     for (idx_t i = 0; i < n_pairs; i++) {
         members.emplace_back(
                 std::string(names[i]),
