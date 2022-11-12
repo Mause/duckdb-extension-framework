@@ -8,7 +8,7 @@ use crate::duckly::{
 };
 use crate::logical_type::LogicalType;
 #[allow(unused)]
-use crate::InitInfo;
+use crate::table_functions::InitInfo;
 use std::ffi::{c_void, CString};
 
 /// A function that returns a queryable table

@@ -1,6 +1,6 @@
 [package]
 name = "duckdb-extension-framework"
-version = "0.4.1"
+version = "0.5.0"
 edition = "2021"
 description = "Purely experimental DuckDB extension framework"
 license-file = "LICENSE"
@@ -27,3 +27,4 @@ autocxx-build = "0.23.1"
 bindgen = "0.61.0"
 build_script = "0.2.0"
 miette = { version= "5.4.1", features=['fancy'] }
+cc = "1.0.76"

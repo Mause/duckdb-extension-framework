@@ -4,7 +4,7 @@ use crate::duckly::{
     duckdb_function_get_local_init_data, duckdb_function_info, duckdb_function_set_error,
 };
 #[allow(unused)]
-use crate::{BindInfo, InitInfo, TableFunction};
+use crate::table_functions::{BindInfo, InitInfo, TableFunction};
 use std::os::raw::c_char;
 
 #[derive(Debug)]

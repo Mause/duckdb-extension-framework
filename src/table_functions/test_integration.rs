@@ -7,9 +7,8 @@ use crate::duckly::{
     duckdb_destroy_result, duckdb_free, duckdb_result, duckdb_result_error,
     duckdb_state_DuckDBError, duckdb_value_varchar,
 };
-use crate::{
-    malloc_struct, BindInfo, DataChunk, FunctionInfo, InitInfo, LogicalType, TableFunction,
-};
+use crate::table_functions::{BindInfo, FunctionInfo, InitInfo, TableFunction};
+use crate::{malloc_struct, DataChunk, LogicalType};
 use std::error::Error;
 use std::ffi::{CStr, CString};
 use std::mem;

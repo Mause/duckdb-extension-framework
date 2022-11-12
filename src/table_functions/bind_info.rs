@@ -4,7 +4,7 @@ use crate::duckly::{
     duckdb_bind_set_cardinality, duckdb_bind_set_error, idx_t,
 };
 #[allow(unused)]
-use crate::TableFunction;
+use crate::table_functions::TableFunction;
 use crate::{as_string, LogicalType, Value};
 use std::ffi::c_void;
 use std::os::raw::c_char;

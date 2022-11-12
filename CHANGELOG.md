@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.5.0](https://github.com/Mause/duckdb-extension-framework/compare/v0.4.1...v0.5.0) (2022-11-10)
+
+
+### Features
+
+* add ReplacementScanInfo ([74dcc53](https://github.com/Mause/duckdb-extension-framework/commit/74dcc534c7616244a900221e9f7fc4f7cd376f2c))
+* add T to Vector&lt;T&gt; ([d764ce4](https://github.com/Mause/duckdb-extension-framework/commit/d764ce44d2bc8622cf7ae8593a953fd2524eaa5c))
+
+
+### Bug Fixes
+
+* LogicalType::new_union_type ([4ed2a37](https://github.com/Mause/duckdb-extension-framework/commit/4ed2a376a192a57ca2f8cda64e6e32ea84c115c4))
+
 ## [0.4.1](https://github.com/Mause/duckdb-extension-framework/compare/v0.4.0...v0.4.1) (2022-11-09)
 
 
