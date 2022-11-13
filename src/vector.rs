@@ -9,10 +9,7 @@ use crate::{
     LogicalType,
 };
 use std::fmt::Debug;
-use std::{
-    ffi::{c_char, c_void},
-    marker::PhantomData,
-};
+use std::{ffi::c_char, marker::PhantomData};
 
 /// Vector of values of a specified PhysicalType.
 pub struct Vector<T>(duckdb_vector, PhantomData<T>);
@@ -27,8 +24,8 @@ impl<T> Vector<T> {
     /// Retrieves the data pointer of the vector.
     ///
     /// The data pointer can be used to read or write values from the vector. How to read or write values depends on the type of the vector.
-    pub fn get_data(&self) -> *mut c_void {
-        unsafe { duckdb_vector_get_data(self.0) }
+    pub fn get_data(&self) -> *mut T {
+        unsafe { duckdb_vector_get_data(self.0).cast() }
     }
 
     /// Assigns a string element in the vector at the specified location.
@@ -149,6 +146,8 @@ mod test {
     fn test_vector() {
         let datachunk = DataChunk::new(vec![LogicalType::new(LogicalTypeId::Bigint)]);
         let vector = datachunk.get_vector::<u64>(0);
-        vector.get_data();
+        let data = vector.get_data();
+
+        data[0] = 42;
     }
 }
