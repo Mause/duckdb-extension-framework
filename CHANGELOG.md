@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.0](https://github.com/Mause/duckdb-extension-framework/compare/v0.5.0...v0.6.0) (2022-11-13)
+
+
+### Features
+
+* add Vector#get_data_as_slice ([a2499a3](https://github.com/Mause/duckdb-extension-framework/commit/a2499a3802c81a3f9024d4adc338d10af1fefdd4))
+
+
+### Bug Fixes
+
+* Vector::get_data should return a pointer of type T ([ef6219a](https://github.com/Mause/duckdb-extension-framework/commit/ef6219a28565f6943854d28f18acc5c41cdc28f7))
+
 ## [0.5.0](https://github.com/Mause/duckdb-extension-framework/compare/v0.4.1...v0.5.0) (2022-11-10)
 
 
