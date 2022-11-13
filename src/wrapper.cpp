@@ -1,4 +1,4 @@
-include "duckdb.hpp"
+#include "duckdb.hpp"
 #include "wrapper.hpp"
 
 #include <memory>
