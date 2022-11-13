@@ -1,4 +1,4 @@
-include "duckdb.hpp"
+#include "duckdb.hpp"
 #pragma once
 #define DUCKDB_BUILD_LOADABLE_EXTENSION
 #include "duckdb.h"
