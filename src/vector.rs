@@ -154,7 +154,7 @@ mod test {
     #[test]
     fn test_vector() {
         let datachunk = DataChunk::new(vec![LogicalType::new(LogicalTypeId::Bigint)]);
-        let vector = datachunk.get_vector::<u64>(0);
+        let mut vector = datachunk.get_vector::<u64>(0);
         let data = vector.get_data_as_slice();
 
         data[0] = 42;
