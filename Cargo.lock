@@ -79,7 +79,7 @@ dependencies = [
 
 [[package]]
 name = "duckdb-extension-framework"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "bindgen",
  "build_script",
