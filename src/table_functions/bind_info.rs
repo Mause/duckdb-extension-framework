@@ -9,6 +9,7 @@ use crate::{as_string, LogicalType, Value};
 use std::ffi::c_void;
 use std::os::raw::c_char;
 
+/// An interface to store and retrieve data during the function bind stage
 #[derive(Debug)]
 pub struct BindInfo {
     ptr: *mut c_void,

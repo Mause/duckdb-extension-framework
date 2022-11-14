@@ -1,3 +1,4 @@
+/// A table function is a function that returns a queryable table
 mod bind_info;
 mod function_info;
 mod init_info;
