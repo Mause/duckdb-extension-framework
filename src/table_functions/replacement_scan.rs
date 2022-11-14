@@ -1,3 +1,9 @@
+/// A replacement scan is a way to pretend that a table exists in DuckDB
+/// For example, you can do the following:
+/// ```sql
+/// SELECT * from "hello.csv"
+/// ```
+/// and DuckDB will realise that you're referring to a CSV file, and read that instead
 use crate::{
     duckly::{
         duckdb_replacement_scan_add_parameter, duckdb_replacement_scan_info,

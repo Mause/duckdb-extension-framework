@@ -8,6 +8,7 @@ use crate::duckly::{
     duckdb_init_set_max_threads, idx_t,
 };
 
+/// An interface to store and retrieve data during the function init stage
 #[derive(Debug)]
 pub struct InitInfo(duckdb_init_info);
 

@@ -7,6 +7,7 @@ use crate::duckly::{
 use crate::table_functions::{BindInfo, InitInfo, TableFunction};
 use std::os::raw::c_char;
 
+/// An interface to store and retrieve data during the function execution stage
 #[derive(Debug)]
 pub struct FunctionInfo(duckdb_function_info);
 
