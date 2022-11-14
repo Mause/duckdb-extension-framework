@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/Mause/duckdb-extension-framework/compare/v0.6.0...v0.7.0) (2022-11-14)
+
+
+### Features
+
+* add config machinery ([9d8b24d](https://github.com/Mause/duckdb-extension-framework/commit/9d8b24d75cef28cb6094881e36b7904beb0ac8f0))
+
 ## [0.6.0](https://github.com/Mause/duckdb-extension-framework/compare/v0.5.0...v0.6.0) (2022-11-13)
 
 
