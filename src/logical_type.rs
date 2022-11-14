@@ -9,6 +9,7 @@ use std::collections::HashMap;
 use std::ffi::{c_char, CString};
 use std::ops::Deref;
 
+/// Represents a logical type in the database - the underlying physical type can differ depending on the implementation
 #[derive(Debug)]
 pub struct LogicalType {
     pub(crate) typ: duckdb_logical_type,
