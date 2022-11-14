@@ -1,13 +1,13 @@
-use crate::check;
 use crate::database::DatabaseOwnership::{Borrowed, Owned};
 use crate::duckly::{
     duckdb_add_replacement_scan, duckdb_close, duckdb_connect, duckdb_connection, duckdb_database,
-    duckdb_delete_callback_t, duckdb_open, duckdb_replacement_callback_t,
+    duckdb_delete_callback_t, duckdb_open, duckdb_open_ext, duckdb_replacement_callback_t,
 };
 use crate::Connection;
+use crate::{check, Config};
 use std::error::Error;
 use std::ffi::{c_void, CString};
-use std::ptr::{addr_of, null_mut};
+use std::ptr::{addr_of, addr_of_mut, null_mut};
 
 /// Equivalent of [`DatabaseData`](https://github.com/duckdb/duckdb/blob/50951241de3d9c06fac5719dcb907eb21163dcab/src/include/duckdb/main/capi_internal.hpp#L27), wraps `duckdb::DuckDB`
 #[repr(C)]
@@ -29,9 +29,25 @@ impl Database {
     pub fn new() -> Result<Self, Box<dyn Error>> {
         let mut db: duckdb_database = null_mut();
 
-        let filename = CString::new(":memory:").unwrap();
+        let filename = CString::new(":memory:")?;
         unsafe {
             check!(duckdb_open(filename.as_ptr(), &mut db));
+        }
+        Ok(Self(Owned(db)))
+    }
+
+    pub fn new_with_config(config: &Config) -> Result<Self, Box<dyn std::error::Error>> {
+        let mut db: duckdb_database = null_mut();
+        let error = CString::new("")?;
+        let filename = CString::new(":memory:")?;
+        let mut out_error = error.as_ptr().cast_mut();
+        unsafe {
+            check!(duckdb_open_ext(
+                filename.as_ptr(),
+                &mut db,
+                config.0,
+                addr_of_mut!(out_error)
+            ));
         }
         Ok(Self(Owned(db)))
     }
@@ -89,9 +105,10 @@ impl Drop for Database {
 #[cfg(test)]
 mod test {
     use crate::database::Database;
-    use crate::Connection;
+    use crate::{Config, Connection};
     use std::any::{Any, TypeId};
     use std::error::Error;
+    use std::ptr::null_mut;
 
     #[test]
     fn test_database_creation() -> Result<(), Box<dyn Error>> {
@@ -103,6 +120,17 @@ mod test {
         assert_eq!(conn.type_id(), TypeId::of::<Connection>());
 
         drop(conn);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_with_config() -> Result<(), Box<dyn Error>> {
+        let config = Config::new()?;
+
+        let db = Database::new_with_config(&config)?;
+
+        assert_ne!(db.get_ptr(), null_mut());
 
         Ok(())
     }
