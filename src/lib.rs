@@ -8,6 +8,7 @@
 
 //! This crate facilitates development of DuckDB extensions using Rust
 
+mod config;
 mod connection;
 mod constants;
 mod data_chunk;
@@ -21,6 +22,7 @@ mod vector;
 
 use std::mem::size_of;
 
+pub use crate::config::{get_configs, Config, ConfigItem, ConfigList};
 pub use crate::connection::Connection;
 pub use crate::constants::LogicalTypeId;
 pub use crate::data_chunk::DataChunk;
