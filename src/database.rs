@@ -52,6 +52,7 @@ impl Database {
         Ok(Self(Owned(db)))
     }
 
+    /// Construct a [`Database`] instance from a pointer passed to an extensions `init` function
     pub fn from_cpp_duckdb(ptr: *mut c_void) -> Self {
         Self(Borrowed(Wrapper { instance: ptr }))
     }
