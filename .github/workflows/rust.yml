@@ -49,7 +49,7 @@ jobs:
     - working-directory: duckdb
       run: git checkout src/include
 
-    - uses: katyo/publish-crates@v1
+    - uses: katyo/publish-crates@v2
       if: github.ref == 'refs/heads/main'
       with:
           registry-token: ${{ secrets.CARGO_TOKEN }}
