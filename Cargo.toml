@@ -17,7 +17,7 @@ doctest = false
 statically_linked = []
 
 [dependencies]
-num-traits = "0.2.15"
+num-traits = "0.2.19"
 num-derive = "0.3.3"
 
 [build-dependencies]
