@@ -1,4 +1,8 @@
-# duckdb-extension-framework
+# Deprecated in favour of code located in https://docs.rs/duckdb/latest/duckdb/vtab/index.html
+
+---
+
+## duckdb-extension-framework
 
 Purely experimental framework
 
